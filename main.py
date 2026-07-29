@@ -35,10 +35,6 @@ async def make_call_list(numbers: list[str]):
     if not all([LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET]):
         raise HTTPException(status_code=500, detail="LiveKit env variables are not set.")
 
-    if len(numbers) != len(account_ids):
-        raise HTTPException(status_code=400, detail="numbers and account_ids must be same length")
-
-    logger.info(f"Inside make_call_list | numbers={numbers} | account_ids={account_ids}")
 
     try:
         lkapi = api.LiveKitAPI(
@@ -47,7 +43,7 @@ async def make_call_list(numbers: list[str]):
             api_secret=LIVEKIT_API_SECRET,
         )
 
-        for number, account_id in zip(numbers, account_ids):
+        for number in numbers:
             full_number = "+91" + number
             room_name   = f"{full_number}-{agent_name}-room"
             room_name   = room_name.encode("utf-8", errors="ignore").decode("utf-8")
