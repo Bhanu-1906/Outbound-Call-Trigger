@@ -29,8 +29,8 @@ def health():
 
 
 @app.post("/make-call")
-async def make_call_list(numbers: list[str], account_ids: list[str]):
-    agent_name = "order-agent"
+async def make_call_list(numbers: list[str]):
+    agent_name = "greatwhite-agent"
 
     if not all([LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET]):
         raise HTTPException(status_code=500, detail="LiveKit env variables are not set.")
@@ -51,7 +51,7 @@ async def make_call_list(numbers: list[str], account_ids: list[str]):
             full_number = "+91" + number
             room_name   = f"{full_number}-{agent_name}-room"
             room_name   = room_name.encode("utf-8", errors="ignore").decode("utf-8")
-            metadata    = json.dumps({"phone_number": full_number, "account_id": account_id})
+            metadata    = json.dumps({"phone_number": full_number})
 
             await lkapi.agent_dispatch.create_dispatch(
                 api.CreateAgentDispatchRequest(
